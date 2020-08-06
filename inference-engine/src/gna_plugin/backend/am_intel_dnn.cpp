@@ -186,6 +186,16 @@ void GNAPluginNS::backend::AMIntelDNN::InitConvolutional1DComponentPrivate(intel
         ptr_inputs  = &comp.ptr_inputs;
         ptr_outputs = &comp.ptr_outputs;
     }
+
+    if (comp.num_rows_in * comp.num_columns_in % 8 != 0) {
+        THROW_GNA_EXCEPTION << "Number of inputs to Convolutional1DComponent is not multiply by 8";
+    }
+    auto filter_stride_size = comp.op.conv1D.num_feature_maps * comp.op.conv1D.num_feature_map_columns;
+    auto max_number_of_out_elements = (comp.num_columns_in - comp.op.conv1D.num_filter_coefficients) / filter_stride_size + 1;
+    if (comp.num_columns_out / max_number_of_out_elements != comp.op.conv1D.num_filters) {
+        // THROW_GNA_EXCEPTION << "Number of outputs or feature map config is incorrect in Convolutional1DComponent";
+        gnalog() << "Number of outputs or feature map config is incorrect in Convolutional1DComponent\n";
+    }
 }
 
 void GNAPluginNS::backend::AMIntelDNN::InitMaxpoolComponentPrivate(intel_dnn_component_t &comp,

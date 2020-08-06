@@ -51,6 +51,11 @@ public:
     MemoryConnection memory_connection;
     ConcatConnection concat_connection;
 
+    static void printTensorDesc(const std::string& name, const InferenceEngine::TensorDesc& desc);
+    static void printConvolutionLayer(const InferenceEngine::ConvolutionLayer& layer);
+    std::vector<uint8_t> static transposeMatrix(uint8_t* ptr_matrix, size_t element_size, uint32_t num_rows, uint32_t num_cols);
+    std::vector<std::size_t> static getFromIRDimsOrderNCHW(InferenceEngine::Layout layout);
+
     void setGNAMemoryPtr(std::shared_ptr<GNAPluginNS::gna_memory_type> gnaMemPtr);
     void setDNNPtr(std::shared_ptr<GNAPluginNS::backend::AMIntelDNN> dnnPtr);
     void setInputDescPtr(std::shared_ptr<GNAPluginNS::InputDesc> inputDescPtr);
