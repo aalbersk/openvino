@@ -379,6 +379,7 @@ void GNAPlugin::LoadNetwork(ICNNNetwork & _network) {
         if (policy.PermutePolicy != Policy::Permute::DISABLED) {
             passes->registerPass<ReversePermutationsPass>();
         }
+        passes->registerPass<AddConvolutionKernelPadPass>();
         passes->registerPass<InsertIdentityLayerPass>();
         passes->registerPass<InsertCopyLayerPass>();
         passes->registerPass<InsertDiagonalLayerPass>();
