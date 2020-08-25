@@ -12,6 +12,7 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <sys/time.h>
 #include <gna-api-types-xnn.h>
 #include "gna_plugin_log.hpp"
 
@@ -56,12 +57,26 @@ void profilerRtcStart(intel_gna_profiler_rtc *p) {
     if (nullptr == p) return;
     clearTimeB(p->passed);
     clearTimeB(p->stop);
-    ftime(&p->start);
+
+    struct timeval temp_time;
+    struct timezone temp_zone;
+    gettimeofday(&temp_time, &temp_zone);
+    p->start.time = temp_time.tv_sec;
+    p->start.millitm = temp_time.tv_usec;
+    p->start.timezone = temp_zone.tz_minuteswest;
+    p->start.dstflag = temp_zone.tz_dsttime;
 }
 
 void profilerRtcStop(intel_gna_profiler_rtc *p) {
     if (nullptr == p) return;
-    ftime(&p->stop);
+
+    struct timeval temp_time;
+    struct timezone temp_zone;
+    gettimeofday(&temp_time, &temp_zone);
+    p->stop.time = temp_time.tv_sec;
+    p->stop.millitm = temp_time.tv_usec;
+    p->stop.timezone = temp_zone.tz_minuteswest;
+    p->stop.dstflag = temp_zone.tz_dsttime;
     /*if ((p->stop.tv_nsec - p->start.tv_nsec)<0) {
         p->passed.tv_sec = p->stop.tv_sec - p->start.tv_sec - 1;
         p->passed.tv_nsec = 1000000000 + p->stop.tv_nsec - p->start.tv_nsec;
