@@ -995,7 +995,7 @@ bool GNAPlugin::WaitFor(uint32_t request_idx, int64_t millisTimeout) {
         auto & outputBlob = outputBlobIt.second;
         auto & outputDesc = outputsDesc[output_idx];
         if (outputBlob->getTensorDesc().getLayout() == Layout::NC || outputBlob->getTensorDesc().getLayout() == Layout::CN
-            || outputBlob->getTensorDesc().getLayout() == Layout::NCHW || outputBlob->getTensorDesc().getLayout() == Layout::NHWC) {
+            || outputBlob->getTensorDesc().getLayout() == Layout::NCHW) {
             // TODO: rotate can be incorporated with exporting - used only in unit tests so far
             // TODO: restore:
 //        if (orientation_out != kDnnInterleavedOrientation) {
